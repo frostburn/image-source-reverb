@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Plane(object):
     """
     N-dimensional reflective "plane"
@@ -45,3 +46,14 @@ class Room(object):
             if plane.distance_to_point(point) < 0:
                 return False
         return True
+
+    def reflections(self, point, iterations, flat=True):
+        result = [[point]]
+        for _ in range(iterations):
+            result.append(self.reflect_points(result[-1]))
+        if not flat:
+            return result
+        images_and_signs = []
+        for i, points in enumerate(result):
+            images_and_signs.extend([(point, (-1)**i) for point in points])
+        return images_and_signs
