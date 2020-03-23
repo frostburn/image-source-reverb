@@ -11,9 +11,12 @@ class Plane(object):
         self.normal = normal / norm
         self.distance = distance
 
+    def distance_to_point(self, x):
+        return np.dot(x, self.normal) + self.distance
+
     def mirror_point(self, x):
         x = np.array(x)
-        distance = np.dot(x, self.normal) + self.distance
+        distance = self.distance_to_point(x)
         if distance < 0:
             return None
         return x - self.normal * (2*distance)
@@ -36,3 +39,9 @@ class Room(object):
                 if point is not None:
                     result.append(point)
         return result
+
+    def contains(self, point):
+        for plane in self.planes:
+            if plane.distance_to_point(point) < 0:
+                return False
+        return True
